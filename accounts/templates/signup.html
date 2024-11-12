@@ -1,0 +1,20 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="fullname">Nom Complet:</label>
+    <input type="text" name="fullname" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" required><br>
+
+    <label for="gender">Sexe:</label>
+    <select name="gender" required>
+        <option value="M">Homme</option>
+        <option value="F">Femme</option>
+        <option value="O">Autre</option>
+    </select><br>
+
+    <label for="password">Mot de passe:</label>
+    <input type="password" name="password" required><br>
+
+    <button type="submit">S'inscrire</button>
+</form>
