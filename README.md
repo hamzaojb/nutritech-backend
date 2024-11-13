@@ -18,6 +18,8 @@ Création d'un modèle User qui contient des informations telles que l'email, le
 - **Connexion (signin)** : Permet aux utilisateurs de se connecter.
 - **Modification de profil (edit)** : Permet aux utilisateurs de modifier leur profil.
 - **Suppression de compte (delete)** : Supprime un utilisateur de la base de données.
+- ajouter produit
+- get produit
 
 **Note** : Le projet n'utilise pas de tokens JWT pour l'authentification, car le développement a été concentré sur les fonctionnalités essentielles, sans la gestion avancée des sessions.
 
