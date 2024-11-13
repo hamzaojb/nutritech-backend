@@ -2,7 +2,12 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from accounts.models import User  # Utiliser le modèle personnalisé User
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
 import json
+# Importation du modèle Produit
+from accounts.models import Produit
+
 
 # Inscription d'un nouvel utilisateur
 @csrf_exempt
@@ -113,6 +118,51 @@ def delete_user(request, user_id):
 
         except User.DoesNotExist:
             return JsonResponse({'message': 'Utilisateur non trouvé'}, status=404)
+        except Exception as e:
+            return JsonResponse({'message': str(e)}, status=500)
+
+    return JsonResponse({'message': 'Méthode non autorisée'}, status=405)
+@csrf_exempt
+def add_produit(request):
+    if request.method == 'POST':
+        try:
+            nom = request.POST.get('nom')
+            prix = request.POST.get('prix')
+            image = request.FILES.get('image')  # Gestion du fichier image
+
+            if not nom or not prix or not image:
+                return JsonResponse({'message': 'Nom, prix et image sont obligatoires'}, status=400)
+
+            produit = Produit.objects.create(nom=nom, prix=prix, image=image)
+
+            return JsonResponse({'message': 'Produit ajouté avec succès!', 'produit': {
+                'id': produit.id,
+                'nom': produit.nom,
+                'prix': str(produit.prix),
+                'image_url': produit.image.url if produit.image else None
+            }}, status=201)
+
+        except Exception as e:
+            return JsonResponse({'message': str(e)}, status=500)
+
+    return JsonResponse({'message': 'Méthode non autorisée'}, status=405)
+
+@csrf_exempt
+def list_produits(request):
+    if request.method == 'GET':
+        try:
+            produits = Produit.objects.all()  # Récupérer tous les produits
+            produit_data = [
+                {
+                    'id': produit.id,
+                    'nom': produit.nom,
+                    'image_url': produit.image.url if produit.image else None,
+                    'prix': str(produit.prix)  # Convertir en string si nécessaire pour JSON
+                }
+                for produit in produits
+            ]
+            return JsonResponse({'produits': produit_data}, status=200)
+
         except Exception as e:
             return JsonResponse({'message': str(e)}, status=500)
 

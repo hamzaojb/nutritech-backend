@@ -45,3 +45,10 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+class Produit(models.Model):
+    nom = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='produits/',max_length=1024, null=True, blank=True)
+    prix = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.nom
